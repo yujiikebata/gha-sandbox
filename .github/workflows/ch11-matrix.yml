@@ -1,0 +1,27 @@
+name: Xcode matrix
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode: ['26.5', '26.6']
+    name: test (Xcode ${{ matrix.xcode }})
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Select Xcode
+        env:
+          VER: ${{ matrix.xcode }}
+        run: sudo xcode-select -s "/Applications/Xcode_$VER.app"
+      - name: Run tests
+        shell: bash
+        env:
+          DESTINATION: platform=iOS Simulator,name=iPhone 17
+        run: |
+          xcodebuild -version
+          xcodebuild test -scheme Memo \
+            -destination "$DESTINATION"

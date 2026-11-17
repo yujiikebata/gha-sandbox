@@ -1,0 +1,46 @@
+name: Nightly
+on:
+  schedule:
+    - cron: '17 18 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run tests
+        shell: bash
+        env:
+          DESTINATION: platform=iOS Simulator,name=iPhone 17
+        run: |
+          xcodebuild test -scheme Memo \
+            -destination "$DESTINATION"
+  notify:
+    needs: test
+    if: ${{ !success() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      RESULT: ${{ needs.test.result }}
+    steps:
+      - name: Build message
+        id: msg
+        run: |
+          url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          url="$url/actions/runs/$GITHUB_RUN_ID"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Result: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+      - name: Post to Slack (v4.0.0)
+        if: env.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: >-
+              Nightly did not pass
+              ${{ steps.msg.outputs.url }}

@@ -1,0 +1,17 @@
+name: s15-apple-tools
+on: workflow_dispatch
+jobs:
+  help:
+    runs-on: macos-26
+    timeout-minutes: 10
+    steps:
+      - run: |
+          xcodebuild -version
+          echo "=== which"
+          for c in swiftlint fastlane xcbeautify xcpretty bundle gh; do
+            echo "$c: $(command -v $c || echo none)"
+          done
+          echo "=== altool"
+          xcrun altool --help 2>&1 || true
+          echo "=== xcodebuild help"
+          xcodebuild -help 2>&1 || true
