@@ -14,9 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Select Xcode
+        shell: bash
         env:
-          XCODE: ${{ matrix.xcode }}
-        run: sudo xcode-select -s "/Applications/Xcode_$XCODE.app"
+          VER: ${{ matrix.xcode }}
+        run: sudo xcode-select -s "/Applications/Xcode_$VER.app"
       - name: Run tests
         shell: bash
         env:

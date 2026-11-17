@@ -29,6 +29,7 @@ jobs:
     steps:
       - name: Build message
         id: msg
+        shell: bash
         run: |
           url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
           url="$url/actions/runs/$GITHUB_RUN_ID"

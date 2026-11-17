@@ -1,0 +1,26 @@
+name: s19-manual-cancel
+on: workflow_dispatch
+jobs:
+  work:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: sleep 120
+  n_not_success:
+    needs: work
+    if: ${{ !success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "result=${{ needs.work.result }}"
+  n_failure:
+    needs: work
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  n_always:
+    needs: work
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
