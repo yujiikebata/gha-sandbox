@@ -1,0 +1,14 @@
+name: s18-timeout-step
+on: workflow_dispatch
+jobs:
+  slow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - run: sleep 200
+      - name: step not cancelled
+        if: ${{ !cancelled() }}
+        run: echo ran
+      - name: step always
+        if: always()
+        run: echo ran
