@@ -5,6 +5,7 @@ public struct Memo: Equatable, Sendable {
         self.title = title
     }
 
+    /// Whether the title has no characters.
     public var isEmpty: Bool {
         title.isEmpty
     }
