@@ -1,0 +1,16 @@
+name: Pipe
+on: workflow_dispatch
+jobs:
+  pipe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Default shell
+        run: |
+          false | cat
+          echo "next line"
+      - name: Explicit bash
+        shell: bash
+        run: |
+          false | cat
+          echo "next line"
