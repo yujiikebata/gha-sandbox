@@ -1,0 +1,13 @@
+name: s09b-if
+on: pull_request
+jobs:
+  if-skipped:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  always-runs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo ran

@@ -1,0 +1,10 @@
+name: s09a-paths
+on:
+  pull_request:
+    paths: ['docs/**']
+jobs:
+  paths-filtered:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo ran

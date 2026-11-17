@@ -1,0 +1,27 @@
+name: s06-cache
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - id: c
+        uses: actions/cache@v5
+        with:
+          path: cache-dir
+          key: demo-${{ hashFiles('cachekey.txt') }}
+      - run: |
+          echo "cache-hit=[${{ steps.c.outputs.cache-hit }}] ref=$GITHUB_REF sha=$GITHUB_SHA"
+          if [ -f cache-dir/made-by.txt ]; then
+            echo "restored, made by: $(cat cache-dir/made-by.txt)"
+          else
+            mkdir -p cache-dir
+            echo "$GITHUB_REF run $GITHUB_RUN_ID" > cache-dir/made-by.txt
+            echo "created"
+          fi
+          git log -1 --format='HEAD=%H %s'

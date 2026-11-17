@@ -1,0 +1,14 @@
+name: s13-danger
+on: pull_request
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  danger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: danger/danger@master
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
