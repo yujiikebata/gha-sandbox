@@ -5,3 +5,7 @@ import Testing
     #expect(Memo(title: "").isEmpty)
     #expect(!Memo(title: "milk").isEmpty)
 }
+
+@Test func blankTitleIsEmpty() {
+    #expect(Memo(title: " ").isEmpty)
+}
