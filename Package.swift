@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "Sample",
+    name: "Memo",
     platforms: [.iOS(.v18), .macOS(.v15)],
-    products: [.library(name: "Sample", targets: ["Sample"])],
+    products: [.library(name: "Memo", targets: ["Memo"])],
     targets: [
-        .target(name: "Sample"),
-        .testTarget(name: "SampleTests", dependencies: ["Sample"]),
+        .target(name: "Memo"),
+        .testTarget(name: "MemoTests", dependencies: ["Memo"]),
     ]
 )

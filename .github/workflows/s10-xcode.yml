@@ -18,7 +18,7 @@ jobs:
       - run: xcrun simctl list devices available | head -40
       - name: test
         run: |
-          xcodebuild test -scheme Sample \
+          xcodebuild test -scheme Memo \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -resultBundlePath TestResults.xcresult
       - if: ${{ !cancelled() }}
