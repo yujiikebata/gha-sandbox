@@ -1,0 +1,29 @@
+name: Handoff
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ver: ${{ steps.info.outputs.ver }}
+    steps:
+      - id: info
+        run: |
+          export CONFIG=Release
+          echo "SCHEME=Memo" >> "$GITHUB_ENV"
+          echo "ver=1.2.0" >> "$GITHUB_OUTPUT"
+          echo "built" > app.txt
+          echo "1: CONFIG=[$CONFIG] SCHEME=[$SCHEME]"
+      - run: |
+          echo "2: CONFIG=[$CONFIG] SCHEME=[$SCHEME]"
+          echo "2: ver=[${{ steps.info.outputs.ver }}]"
+          ls app.txt
+  notify:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          echo "3: SCHEME=[$SCHEME]"
+          echo "3: ver=[${{ needs.build.outputs.ver }}]"
+          ls app.txt || echo "3: app.txt is not here"
