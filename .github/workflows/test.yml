@@ -28,3 +28,4 @@ jobs:
         with:
           name: test-results
           path: TestResults.xcresult
+          retention-days: 7
