@@ -20,9 +20,9 @@ jobs:
           echo "next step: FOO=[$FOO] BAR=[$BAR] v=[${{ steps.s1.outputs.v }}]"
           ls file.txt
       - if: steps.s1.outputs.flag == true
-        run: echo "ran: flag == true (boolean)"
+        run: echo "ran -- flag == true (boolean)"
       - if: steps.s1.outputs.flag == 'true'
-        run: echo "ran: flag == 'true' (string)"
+        run: echo "ran -- flag == string true"
       - run: echo "missing property=[${{ steps.s1.outputs.nope }}] [${{ github.event.inputs.nope }}]"
   b:
     needs: a
