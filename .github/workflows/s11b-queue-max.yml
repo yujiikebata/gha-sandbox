@@ -1,0 +1,11 @@
+name: s11b-queue-max
+on: workflow_dispatch
+concurrency:
+  group: s11b-queue
+  queue: max
+jobs:
+  q:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: sleep 40

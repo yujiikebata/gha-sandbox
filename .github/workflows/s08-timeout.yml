@@ -1,0 +1,14 @@
+name: s08-timeout
+on: workflow_dispatch
+jobs:
+  slow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - run: sleep 200
+  after:
+    needs: slow
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "slow.result=${{ needs.slow.result }}"

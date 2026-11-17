@@ -1,0 +1,28 @@
+name: s10-xcode
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - run: |
+          xcode-select -p
+          xcodebuild -version
+          ls /Applications | grep -i xcode
+          sw_vers
+      - name: DEVELOPER_DIR picks another Xcode
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_26.5.app/Contents/Developer
+        run: xcodebuild -version
+      - run: xcrun simctl list devices available | head -40
+      - name: test
+        run: |
+          xcodebuild test -scheme Sample \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -resultBundlePath TestResults.xcresult
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: TestResults.xcresult

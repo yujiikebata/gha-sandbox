@@ -1,0 +1,8 @@
+name: s04b-no-permissions
+on: workflow_dispatch
+jobs:
+  defaults:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "see 'Set up job' > GITHUB_TOKEN Permissions"

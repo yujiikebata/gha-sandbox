@@ -1,0 +1,35 @@
+name: s02-passing
+on: workflow_dispatch
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      v: ${{ steps.s1.outputs.v }}
+    steps:
+      - id: s1
+        run: |
+          export FOO=1
+          echo "BAR=2" >> "$GITHUB_ENV"
+          echo "same step: FOO=[$FOO] BAR=[$BAR]"
+          echo "v=hello" >> "$GITHUB_OUTPUT"
+          echo "flag=true" >> "$GITHUB_OUTPUT"
+          echo x > file.txt
+          echo "### summary from step 1" >> "$GITHUB_STEP_SUMMARY"
+      - run: |
+          echo "next step: FOO=[$FOO] BAR=[$BAR] v=[${{ steps.s1.outputs.v }}]"
+          ls file.txt
+      - if: steps.s1.outputs.flag == true
+        run: echo "ran: flag == true (boolean)"
+      - if: steps.s1.outputs.flag == 'true'
+        run: echo "ran: flag == 'true' (string)"
+      - run: echo "missing property=[${{ steps.s1.outputs.nope }}] [${{ github.event.inputs.nope }}]"
+  b:
+    needs: a
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          echo "from job a: v=[${{ needs.a.outputs.v }}] BAR=[$BAR]"
+          ls file.txt || echo "file.txt is not here"
+          ls -A "$GITHUB_WORKSPACE"

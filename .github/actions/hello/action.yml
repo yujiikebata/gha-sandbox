@@ -1,0 +1,7 @@
+name: hello
+description: local composite action for the spike
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "hello from the local action"

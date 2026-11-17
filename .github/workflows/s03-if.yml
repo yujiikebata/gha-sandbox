@@ -1,0 +1,48 @@
+name: s03-if
+on: workflow_dispatch
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - id: boom
+        run: exit 1
+      - name: plain (no if)
+        run: echo ran
+      - name: if failure()
+        if: failure()
+        run: echo ran
+      - name: if not cancelled
+        if: ${{ !cancelled() }}
+        run: echo ran
+      - name: if always()
+        if: always()
+        run: echo ran
+      - name: if conclusion only
+        if: steps.boom.conclusion == 'failure'
+        run: echo ran
+      - name: if failure() and conclusion
+        if: failure() && steps.boom.conclusion == 'failure'
+        run: echo ran
+  b_plain:
+    needs: a
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  c_failure:
+    needs: a
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  d_not_cancelled:
+    needs: a
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "ran; a.result=${{ needs.a.result }}"
+  e_after_skipped:
+    needs: b_plain
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran

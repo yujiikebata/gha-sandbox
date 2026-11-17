@@ -1,0 +1,12 @@
+name: s11c-timezone
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 9 1 1 *'
+      timezone: "Asia/Tokyo"
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: date

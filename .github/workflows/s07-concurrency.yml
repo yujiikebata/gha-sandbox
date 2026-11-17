@@ -1,0 +1,10 @@
+name: s07-concurrency
+on: workflow_dispatch
+concurrency:
+  group: s07-default
+jobs:
+  q:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: sleep 40

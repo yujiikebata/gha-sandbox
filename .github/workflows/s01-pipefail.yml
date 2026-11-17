@@ -1,0 +1,25 @@
+name: s01-pipefail
+on: workflow_dispatch
+jobs:
+  pipe:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-26]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - id: default_shell
+        continue-on-error: true
+        run: |
+          false | cat
+          echo "reached the line after the pipe"
+      - id: explicit_bash
+        continue-on-error: true
+        shell: bash
+        run: |
+          false | cat
+          echo "reached the line after the pipe"
+      - run: |
+          echo "default_shell outcome=${{ steps.default_shell.outcome }}"
+          echo "explicit_bash outcome=${{ steps.explicit_bash.outcome }}"
