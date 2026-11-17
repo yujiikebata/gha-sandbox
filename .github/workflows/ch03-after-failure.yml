@@ -1,0 +1,30 @@
+name: After failure
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Run tests
+        run: exit 1
+      - name: Print summary
+        run: echo "summary"
+      - name: Save results
+        if: ${{ !cancelled() }}
+        run: echo "save"
+      - name: Collect logs
+        if: failure()
+        run: echo "logs"
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "deploy"
+  notify:
+    needs: test
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "notify"
