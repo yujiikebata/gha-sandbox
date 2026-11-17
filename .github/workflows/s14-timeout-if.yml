@@ -1,0 +1,41 @@
+name: s14-timeout-if
+on: workflow_dispatch
+jobs:
+  slow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - run: sleep 200
+      - name: step failure
+        if: failure()
+        run: echo ran
+      - name: step cancelled
+        if: cancelled()
+        run: echo ran
+      - name: step always
+        if: always()
+        run: echo ran
+  j_failure:
+    needs: slow
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  j_cancelled:
+    needs: slow
+    if: cancelled()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  j_not_success:
+    needs: slow
+    if: ${{ !success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ran
+  j_result:
+    needs: slow
+    if: ${{ !cancelled() && needs.slow.result != 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "result=${{ needs.slow.result }}"
