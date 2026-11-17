@@ -1,0 +1,18 @@
+name: Permissions
+on: workflow_dispatch
+permissions:
+  contents: read
+  issues: write
+jobs:
+  inherit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "inherit"
+  comment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - run: echo "comment"

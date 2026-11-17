@@ -1,0 +1,19 @@
+name: Injection
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        type: string
+jobs:
+  show:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Embedded
+        run: |
+          echo "title: ${{ inputs.title }}"
+      - name: Through env
+        env:
+          TITLE: ${{ inputs.title }}
+        run: |
+          echo "title: $TITLE"
